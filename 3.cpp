@@ -23,7 +23,7 @@ int main() {
         write(STDOUT_FILENO, prompt, strlen(prompt));
 
         // Read user input
-        ssize_t input_length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
+        //ssize_t input_length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 
 
 
@@ -34,6 +34,7 @@ int main() {
 
         // Remove the newline character at the end
         command[strcspn(command, "\n")] = '\0';
+
 
 // Check for the exit command
         if (strcmp(command, "exit") == 0) {
