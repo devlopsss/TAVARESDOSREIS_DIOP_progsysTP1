@@ -31,11 +31,11 @@ int main() {
         // On enlève la ligne precedente
         command[input_length - 1] = '\0';
 
-        // On 
+        // Execution de la comande
         pid_t pid = fork();
 
         if (pid == 0) {
-            // Child process
+            // Child 
             execlp(command, command, NULL);
 
             // If exec fails
@@ -45,7 +45,7 @@ int main() {
             // Fork failed
             perror("Error");
         } else {
-            // Parent process
+            // Parent 
             wait(NULL);
         }
     }
