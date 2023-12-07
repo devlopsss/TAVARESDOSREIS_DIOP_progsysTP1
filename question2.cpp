@@ -19,19 +19,19 @@ int main() {
     while (1) {
         write(STDOUT_FILENO, prompt, strlen(prompt));
 
-        // Read user input
+        // On lit la commande
         ssize_t input_length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 
-        // Check for the exit command
+        // On verifie si on doit arreter le processus (si l'entrée est "exit")
         if (strncmp(command, "exit", 4) == 0) {
             write(STDOUT_FILENO, "Au revoir!\n", 11);
             break;
         }
 
-        // Remove the newline character at the end
+        // On enlève la ligne precedente
         command[input_length - 1] = '\0';
 
-        // Execute the command
+        // On 
         pid_t pid = fork();
 
         if (pid == 0) {
