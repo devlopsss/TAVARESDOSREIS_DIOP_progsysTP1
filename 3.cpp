@@ -1,70 +1,53 @@
 //
 // Created by ensea on 05/12/23.
 //
-
-
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
 
-#define MAX_COMMAND_LENGTH 100
+#include <iostream>
+#include <cstring>
+
+#include <iostream>
+#include <cstring>
+
+#include <iostream>
+#include <cstring>
+#include <unistd.h>
 
 int main() {
-    char command[MAX_COMMAND_LENGTH];
-    char welcome_message[] = "Bienvenue dans le Shell ENSEA.\nPour quitter, tapez 'exit'.\n";
-    char prompt[] = "enseash % ";
+    char input[100];
 
-    write(STDOUT_FILENO, welcome_message, strlen(welcome_message));
+    write(STDOUT_FILENO, "Bienvenue dans le programme shell simplifié. Tapez 'exit' pour quitter.\n", 72);
 
-    while (1) {
-        write(STDOUT_FILENO, prompt, strlen(prompt));
+    while (true) {
+        // Demander à l'utilisateur d'entrer une commande
+        write(STDOUT_FILENO, "$ ", 2);
+        ssize_t bytesRead = read(STDIN_FILENO, input, sizeof(input));
 
-        // Read user input
-        //ssize_t input_length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
-
-
-
-        if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL) {
-// Handle <Ctrl>+d or EOF
+        // Quitter si Ctrl+D est pressé (EOF)
+        if (bytesRead == 0) {
+            write(STDOUT_FILENO, "Bye bye...\n", 10);
             break;
         }
 
-        // Remove the newline character at the end
-        command[strcspn(command, "\n")] = '\0';
+        // Supprimer le saut de ligne à la fin de la commande
+        input[strcspn(input, "\n")] = '\0';
 
-
-// Check for the exit command
-        if (strcmp(command, "exit") == 0) {
-            const char exit_message[] = "Bye bye...\n";
-            write(STDOUT_FILENO, exit_message, sizeof(exit_message) - 1);
+        // Vérifier si l'utilisateur a saisi "exit"
+        if (std::strcmp(input, "exit") == 0) {
+            write(STDOUT_FILENO, "Bye bye...\n", 10);
             break;
         }
 
-
-        // Execute the command
-        pid_t pid = fork();
-
-        if (pid == 0) {
-            // Child process
-            execlp(command, command, NULL);
-
-            // If exec fails
-            perror("Error");
-            exit(EXIT_FAILURE);
-        } else if (pid < 0) {
-            // Fork failed
-            perror("Error");
-        } else {
-            // Parent process
-            wait(NULL);
-        }
-        // Return to the prompt
-
-
+        // Exécuter la commande (dans cet exemple, simplement l'afficher)
+        write(STDOUT_FILENO, "Commande non reconnue : ", 24);
+        write(STDOUT_FILENO, input, bytesRead);
+        write(STDOUT_FILENO, "\n", 1);
     }
 
     return 0;
 }
+
